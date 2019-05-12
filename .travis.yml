@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t taklimen/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run taklimen/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t taklimen/multi-client ./client
+  - docker build -t taklimen/multi-nginx ./nginx
+  - docker build -t taklimen/multi-server ./server
+  - docker build -t taklimen/multi-worker ./worker
+  # Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Puse images to docker hub
+  - docker push taklimen/multi-client
+  - docker push taklimen/multi-nginx
+  - docker push /multi-server
+  - docker push taklimen/multi-worker
+  
