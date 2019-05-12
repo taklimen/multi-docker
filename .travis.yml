@@ -18,6 +18,5 @@ after_success:
   # Puse images to docker hub
   - docker push taklimen/multi-client
   - docker push taklimen/multi-nginx
-  - docker push /multi-server
+  - docker push takimen/multi-server
   - docker push taklimen/multi-worker
-  
